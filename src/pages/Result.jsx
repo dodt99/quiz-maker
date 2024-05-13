@@ -1,12 +1,17 @@
 import { Button } from "react-bootstrap";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import QuestionList from "../components/QuestionList";
 
 const Result = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { questions, answers } = state;
+
+  if (!state || !state?.questions || !state?.answers) {
+    return <Navigate to="/" replace />;
+  }
+
+  const { questions = [], answers = {} } = state;
 
   const finalScore = questions.reduce(
     (total, q) => (q.correct_answer === answers[q.id] ? total + 1 : total),
